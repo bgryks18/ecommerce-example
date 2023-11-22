@@ -16,7 +16,12 @@ const List = ({
   }
 }) => {
   return (
-    <Grid container columnSpacing="20px" sx={{ position: 'relative' }}>
+    <Grid
+      container
+      columnSpacing="20px"
+      rowGap="20px"
+      sx={{ position: 'relative' }}
+    >
       <Typography
         component="h2"
         variant="h4"
@@ -24,7 +29,7 @@ const List = ({
           fontWeight: '700',
           paddingInline: '20px',
           width: '100%',
-          paddingBottom: '24px',
+          paddingBottom: '4px',
         }}
       >
         Pears, apples, quinces
