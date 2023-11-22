@@ -8,6 +8,10 @@ import Sidebar from './Sidebar'
 let theme = createTheme({
   typography: {
     fontFamily: 'Nunito Sans, sans-serif',
+    fontWeightBold: 600,
+    fontWeightMedium: 500,
+    fontWeightRegular: 400,
+    fontWeightLight: 300,
   },
   palette: {
     background: {

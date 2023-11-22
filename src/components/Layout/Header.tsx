@@ -75,9 +75,9 @@ const useStyles = makeStyles((theme) => ({
   },
   searchButton: {
     height: '100%',
-    borderRadius: '50px !important',
-    borderTopLeftRadius: '0 !important',
-    borderBottomLeftRadius: '0 !important',
+    borderRadius: '50px',
+    borderTopLeftRadius: '0',
+    borderBottomLeftRadius: '0',
     border: '0',
     width: '170px',
     [theme.breakpoints.down('md')]: {
@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
     gap: 10,
   },
   iconButton: {
-    backgroundColor: theme.palette.background.default + '!important',
+    backgroundColor: theme.palette.background.default,
   },
   popover: {
     width: '300px',

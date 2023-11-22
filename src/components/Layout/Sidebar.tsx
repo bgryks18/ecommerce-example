@@ -1,11 +1,11 @@
 import { Divider, MenuItem, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import EggIcon from '@mui/icons-material/Egg'
-import FreeBreakfastIcon from '@mui/icons-material/FreeBreakfast'
-import IcecreamIcon from '@mui/icons-material/Icecream'
-import RestaurantIcon from '@mui/icons-material/Restaurant'
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
-import EggAltIcon from '@mui/icons-material/EggAlt'
+import EggIcon from '@mui/icons-material/EggOutlined'
+import FreeBreakfastIcon from '@mui/icons-material/FreeBreakfastOutlined'
+import IcecreamIcon from '@mui/icons-material/IcecreamOutlined'
+import RestaurantIcon from '@mui/icons-material/RestaurantOutlined'
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenuOutlined'
+import EggAltIcon from '@mui/icons-material/EggAltOutlined'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     overflowY: 'auto',
   },
   paper: {
-    boxShadow: 'none !important',
+    boxShadow: 'none',
     '& .MuiMenuItem-root': {
       color: theme.palette.secondary.main,
       display: 'flex',
@@ -35,12 +35,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   title: {
-    fontWeight: 'bold !important',
+    fontWeight: 'bold',
     padding: '16px 16px',
     display: 'flex',
     flexDirection: 'column',
     gap: 2,
-    marginBottom: '4px !important',
+    marginBottom: '4px',
   },
 }))
 
@@ -49,7 +49,7 @@ const Sidebar = () => {
   return (
     <div className={classes.container}>
       <Paper className={classes.paper}>
-        <Typography variant="body1" className={classes.title}>
+        <Typography variant="body1" className={classes.title} component={'div'}>
           Top Categories
           <Divider />
         </Typography>
