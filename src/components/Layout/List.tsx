@@ -1,12 +1,9 @@
-import React, { ReactNode } from 'react'
-import { Box, Grid, GridSize, Typography } from '@mui/material'
+import { Grid, GridSize, Typography } from '@mui/material'
 import ProductBox from '../ProductBox/ProductBox'
 
 const List = ({
-  children,
   gridSize = { md: 4 },
 }: {
-  children: ReactNode
   gridSize?: {
     xl?: GridSize
     lg?: GridSize

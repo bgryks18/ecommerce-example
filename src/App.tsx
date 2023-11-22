@@ -1,13 +1,11 @@
-import { Box, Button } from '@mui/material'
-import List from './components/Layout/List'
+import { Route, Routes } from 'react-router-dom'
+import Home from './pages/Home'
 
 function App() {
   return (
-    <Box sx={{ padding: '20px', minHeight: '100dvh' }}>
-      <List>
-        <Button variant="contained">Click</Button>
-      </List>
-    </Box>
+    <Routes>
+      <Route path="/" element={<Home />}></Route>
+    </Routes>
   )
 }
 

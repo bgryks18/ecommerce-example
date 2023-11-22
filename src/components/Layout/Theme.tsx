@@ -90,7 +90,7 @@ const Theme = ({ children }: { children: ReactNode }) => {
           <Grid item xs={12} md={3}>
             <Sidebar />
           </Grid>
-          <Grid item xs={12} md={9}>
+          <Grid item xs={12} md={9} sx={{ padding: '20px' }}>
             {children}
           </Grid>
         </Grid>
