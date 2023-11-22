@@ -1,7 +1,10 @@
 import { Grid, GridSize, Typography } from '@mui/material'
 import ProductBox from '../ProductBox/ProductBox'
+import { ReactNode } from 'react'
+import { getProducts } from '@/api/product'
 
-const List = ({
+const ProductList = ({
+  title,
   gridSize = { md: 4 },
 }: {
   gridSize?: {
@@ -11,7 +14,11 @@ const List = ({
     sm?: GridSize
     xs?: GridSize
   }
+
+  title?: string | ReactNode
 }) => {
+  const { data = [] } = getProducts()
+
   return (
     <Grid
       container
@@ -29,19 +36,17 @@ const List = ({
           paddingBottom: '4px',
         }}
       >
-        Pears, apples, quinces
+        {title && title}
       </Typography>
-      <Grid item {...gridSize} width={'100%'}>
-        <ProductBox />
-      </Grid>
-      <Grid item {...gridSize} width={'100%'}>
-        <ProductBox />
-      </Grid>
-      <Grid item {...gridSize} width={'100%'}>
-        <ProductBox />
-      </Grid>
+      {data.map((item) => {
+        return (
+          <Grid item {...gridSize} width={'100%'} key={item.id}>
+            <ProductBox {...item} />
+          </Grid>
+        )
+      })}
     </Grid>
   )
 }
 
-export default List
+export default ProductList

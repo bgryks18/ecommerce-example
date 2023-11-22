@@ -6,6 +6,8 @@ import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import { makeStyles } from '@mui/styles'
 import Rating from '@mui/material/Rating'
+import { ProductItemEntity } from '@/types/type'
+import { getCurrency } from '@/utils/currency'
 
 const useStyles = makeStyles((theme) => ({
   cardMedia: {
@@ -74,25 +76,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function ProductBox() {
+const ProductBox = ({
+  id,
+  image,
+  name,
+  originalPrice,
+  price,
+  rating,
+  discount,
+}: ProductItemEntity) => {
   const classes = useStyles()
   return (
     <Card sx={{ position: 'relative' }}>
-      <Typography className={classes.discountButton}>12% off</Typography>
+      {discount && (
+        <Typography className={classes.discountButton}>{discount}</Typography>
+      )}
       <CardMedia
         className={classes.cardMedia}
-        image="https://s3.amazonaws.com/www-inside-design/uploads/2020/10/aspect-ratios-blogpost-1x1-1.png"
+        image={image}
         title="green iguana"
       />
       <CardContent className={classes.cardContent}>
         <Typography component="div" className={classes.cardInfo}>
           <Typography variant="body1" component="div" fontWeight="bold">
-            Lizard
+            {name}
           </Typography>
           <Typography variant="body2" component="div" className={classes.star}>
             <Rating
               name="star"
-              defaultValue={4}
+              defaultValue={rating}
               precision={0.5}
               readOnly
               size="small"
@@ -103,13 +115,15 @@ export default function ProductBox() {
               fontWeight="regular"
               color="gray"
             >
-              (4)
+              ({rating})
             </Typography>
           </Typography>
 
           <Typography variant="body2" component="div" className={classes.price}>
-            <span className={classes.currentPrice}>$174.24</span>
-            <span className={classes.oldPrice}>$198.00</span>
+            <span className={classes.currentPrice}>{getCurrency(price)}</span>
+            <span className={classes.oldPrice}>
+              {getCurrency(originalPrice)}
+            </span>
           </Typography>
         </Typography>
 
@@ -134,3 +148,5 @@ export default function ProductBox() {
     </Card>
   )
 }
+
+export default ProductBox

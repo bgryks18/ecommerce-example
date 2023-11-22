@@ -1,15 +1,7 @@
-import { getProducts } from '@/api/product'
-import List from '@/components/Layout/List'
-import { Box } from '@mui/material'
+import ProducList from '@/components/ProductList/ProductList'
 
 const Home = () => {
-  const { data } = getProducts()
-
-  return (
-    <Box sx={{ minHeight: '100dvh' }}>
-      <List />
-    </Box>
-  )
+  return <ProducList title="Pears, apples, quinces" />
 }
 
 export default Home
