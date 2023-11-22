@@ -12,9 +12,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'sticky',
     top: 80,
     left: 0,
-    padding: 20,
-    paddingLeft: 0,
-    paddingRight: 0,
+    padding: 0,
     maxHeight: 'calc(100vh + (-120px))',
     [theme.breakpoints.down('md')]: {
       top: 0,
@@ -33,10 +31,6 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
       alignItems: 'center',
       columnGap: 8,
-      '&:last-child': {
-        borderBottomRightRadius: 'inherit',
-        borderBottomLeftRadius: 'inherit',
-      },
     },
     [theme.breakpoints.down('md')]: {
       display: 'flex',
@@ -44,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
       flexWrap: 'wrap',
       gap: 0,
       '& .MuiMenuItem-root': {
+        flex: 1,
         columnGap: 2,
         '& span': {
           fontSize: '0.8rem',
