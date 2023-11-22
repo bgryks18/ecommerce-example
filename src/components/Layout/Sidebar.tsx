@@ -15,32 +15,52 @@ const useStyles = makeStyles((theme) => ({
     padding: 20,
     paddingLeft: 0,
     paddingRight: 0,
-    height: 'calc(100vh + (-120px))',
+    maxHeight: 'calc(100vh + (-120px))',
     [theme.breakpoints.down('md')]: {
       top: 0,
+      paddingBottom: 0,
     },
     overflowY: 'auto',
   },
   paper: {
     boxShadow: 'none',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 3,
+    flexWrap: 'wrap',
     '& .MuiMenuItem-root': {
       color: theme.palette.secondary.main,
       display: 'flex',
       alignItems: 'center',
-      gap: 8,
+      columnGap: 8,
       '&:last-child': {
         borderBottomRightRadius: 'inherit',
         borderBottomLeftRadius: 'inherit',
       },
     },
+    [theme.breakpoints.down('md')]: {
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 0,
+      '& .MuiMenuItem-root': {
+        columnGap: 2,
+        '& span': {
+          fontSize: '0.8rem',
+        },
+      },
+    },
   },
   title: {
-    fontWeight: 'bold',
+    fontWeight: theme.typography.fontWeightBold,
     padding: '16px 16px',
     display: 'flex',
     flexDirection: 'column',
     gap: 2,
-    marginBottom: '4px',
+    [theme.breakpoints.down('md')]: {
+      flexBasis: '100%',
+      padding: '6px 16px',
+    },
   },
 }))
 
@@ -49,37 +69,37 @@ const Sidebar = () => {
   return (
     <div className={classes.container}>
       <Paper className={classes.paper}>
-        <Typography variant="body1" className={classes.title} component={'div'}>
+        <Typography variant="body1" className={classes.title} component="div">
           Top Categories
           <Divider />
         </Typography>
         <MenuItem>
           <EggIcon />
-          <Typography variant="body2" fontWeight="bold">
+          <Typography variant="body2" fontWeight="bold" component="span">
             Dairy Eggs
           </Typography>
         </MenuItem>
         <MenuItem>
           <FreeBreakfastIcon />
-          <Typography variant="body2" fontWeight="bold">
+          <Typography variant="body2" fontWeight="bold" component="span">
             Breakfast
           </Typography>
         </MenuItem>
         <MenuItem>
           <IcecreamIcon />
-          <Typography variant="body2" fontWeight="bold">
+          <Typography variant="body2" fontWeight="bold" component="span">
             Frozen
           </Typography>
         </MenuItem>
         <MenuItem>
           <RestaurantIcon />
-          <Typography variant="body2" fontWeight="bold">
+          <Typography variant="body2" fontWeight="bold" component="span">
             Vegetables
           </Typography>
         </MenuItem>
         <MenuItem>
           <RestaurantMenuIcon />
-          <Typography variant="body2" fontWeight="bold">
+          <Typography variant="body2" fontWeight="bold" component="span">
             Fruits & Vegetables
           </Typography>
         </MenuItem>

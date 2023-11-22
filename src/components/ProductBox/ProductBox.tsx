@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: 'contain',
     WebkitBackgroundSize: 'contain',
     aspectRatio: '1/1',
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: '#efefef',
     width: '100%',
   },
 

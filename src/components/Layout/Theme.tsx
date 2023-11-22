@@ -5,7 +5,7 @@ import { ReactNode } from 'react'
 import Header from './Header'
 import Sidebar from './Sidebar'
 
-let theme = createTheme({
+const theme = createTheme({
   typography: {
     fontFamily: 'Nunito Sans, sans-serif',
     fontWeightBold: 600,
@@ -71,11 +71,9 @@ let theme = createTheme({
         root: {
           '@media screen and (max-width:991px)': {
             minHeight: '36px',
-            padding: '4px 12px',
           },
           '@media screen and (max-width:768px)': {
             minHeight: '32px',
-            padding: '3px 9px',
           },
         },
       },
@@ -89,10 +87,10 @@ const Theme = ({ children }: { children: ReactNode }) => {
       <Header />
       <Container maxWidth="xl">
         <Grid container>
-          <Grid item xs={3}>
+          <Grid item xs={12} md={3}>
             <Sidebar />
           </Grid>
-          <Grid item xs={9}>
+          <Grid item xs={12} md={9}>
             {children}
           </Grid>
         </Grid>
