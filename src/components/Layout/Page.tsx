@@ -18,11 +18,11 @@ const Page = ({
       <Container maxWidth="xl">
         <Grid container columnSpacing="20px">
           {showSidebar && (
-            <Grid item xs={12} md={3} paddingBlock="20px">
+            <Grid item xs={12} md={3} paddingTop="20px">
               <Sidebar />
             </Grid>
           )}
-          <Grid item xs={12} md={showSidebar ? 9 : 12} paddingBlock="20px">
+          <Grid item xs={12} md={showSidebar ? 9 : 12} paddingTop="20px">
             {children}
           </Grid>
         </Grid>

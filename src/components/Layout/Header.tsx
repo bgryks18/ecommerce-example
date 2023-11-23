@@ -1,6 +1,5 @@
 import {
   AppBar,
-  AppBarOwnProps,
   Badge,
   Button,
   Container,
@@ -19,8 +18,12 @@ import SearchIcon from '@mui/icons-material/Search'
 import PersonIcon from '@mui/icons-material/Person'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
 import MoreIcon from '@mui/icons-material/MoreVert'
+import LoginIcon from '@mui/icons-material/Login'
 import { useId, useState } from 'react'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { Link } from 'react-router-dom'
+import { PATH } from '@/types/paths'
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -92,6 +95,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
     gap: 10,
   },
+  link: {
+    textDecoration: 'none',
+    color: 'inherit',
+  },
   iconButton: {
     backgroundColor: theme.palette.background.default,
   },
@@ -105,11 +112,67 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = () => {
   const classes = useStyles()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const appBarPosition = isMobile ? 'relative' : 'sticky'
+  const logoUrl = isMobile ? '/favicon.png' : '/logo.png'
+
+  return (
+    <AppBar className={classes.appBar} position={appBarPosition}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Grid
+            container
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            spacing={2}
+          >
+            <Grid item xs={2} md={3}>
+              <div className={classes.logo}>
+                <Link to="/">
+                  <img src={logoUrl} />
+                </Link>
+              </div>
+            </Grid>
+            <Grid item xs={8} md={6}>
+              <div className={classes.searchBox}>
+                <OutlinedInput
+                  size="medium"
+                  margin="none"
+                  placeholder="Searching for"
+                  startAdornment={<SearchIcon color={'action'} />}
+                  endAdornment={
+                    <Button
+                      variant="contained"
+                      className={classes.searchButton}
+                    >
+                      Search
+                    </Button>
+                  }
+                />
+              </div>
+            </Grid>
+
+            <Grid item xs={2} md={3}>
+              <MenuLinks />
+            </Grid>
+          </Grid>
+        </Toolbar>
+      </Container>
+    </AppBar>
+  )
+}
+
+export default Header
+
+const MenuLinks = () => {
+  const classes = useStyles()
   const userMenuPopoverId = useId()
   const userBasketPopoverId = useId()
   const userMobileMenuId = useId()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const { isLoggedIn } = useCurrentUser()
 
   const [anchorUserMenuPopoverEl, setAnchorUserMenuPopoverEl] =
     useState<HTMLButtonElement | null>(null)
@@ -153,141 +216,112 @@ const Header = () => {
   const isUserMenuPopoverOpen = Boolean(anchorUserMenuPopoverEl)
   const isUserBasketPopoverOpen = Boolean(anchorUserBasketPopoverEl)
   const isUserMobileMenuOpen = Boolean(anchorUserMobileMenuEl)
-  const logoUrl = isMobile ? '/favicon.png' : '/logo.png'
-  const appBarPosition = isMobile ? 'relative' : 'sticky'
-  return (
-    <AppBar className={classes.appBar} position={appBarPosition}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Grid
-            container
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            spacing={2}
-          >
-            <Grid item xs={2} md={3}>
-              <div className={classes.logo}>
-                <img src={logoUrl} />
-              </div>
-            </Grid>
-            <Grid item xs={8} md={6}>
-              <div className={classes.searchBox}>
-                <OutlinedInput
-                  size="medium"
-                  margin="none"
-                  placeholder="Searching for"
-                  startAdornment={<SearchIcon color={'action'} />}
-                  endAdornment={
-                    <Button
-                      variant="contained"
-                      className={classes.searchButton}
-                    >
-                      Search
-                    </Button>
-                  }
-                />
-              </div>
-            </Grid>
 
-            <Grid item xs={2} md={3}>
-              <div className={classes.links}>
-                {!isMobile ? (
-                  <>
-                    <IconButton
-                      size="large"
-                      className={classes.iconButton}
-                      onClick={handleUserMenuPopoverClick}
-                    >
-                      <PersonIcon />
-                    </IconButton>
-                    <Menu
-                      id={userMenuPopoverId}
-                      open={isUserMenuPopoverOpen}
-                      anchorEl={anchorUserMenuPopoverEl}
-                      onClose={handleUserMenuPopoverClose}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                      }}
-                      classes={{ paper: classes.popover }}
-                    >
-                      <MenuItem onClick={handleUserMenuPopoverClose}>
-                        Logout
-                      </MenuItem>
-                    </Menu>
-                    <Badge badgeContent={4} color="primary">
-                      <IconButton
-                        size="large"
-                        className={classes.iconButton}
-                        onClick={handleUserBasketPopoverClick}
-                      >
-                        <ShoppingBasketIcon />
-                      </IconButton>
-                    </Badge>
-                    <Menu
-                      id={userBasketPopoverId}
-                      open={isUserBasketPopoverOpen}
-                      anchorEl={anchorUserBasketPopoverEl}
-                      onClose={handleUserBasketPopoverClose}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                      }}
-                      classes={{ paper: classes.popover }}
-                    >
-                      <Typography
-                        variant="body1"
-                        className={classes.basketItem}
-                      >
-                        2 items
-                      </Typography>
-                      <MenuItem onClick={handleUserMenuPopoverClose}>
-                        Go to the basket
-                      </MenuItem>
-                    </Menu>
-                  </>
-                ) : (
-                  <>
-                    <IconButton
-                      size="small"
-                      onClick={handleUserMobileMenuClick}
-                    >
-                      <MoreIcon />
-                    </IconButton>
-                    <Menu
-                      id={userMobileMenuId}
-                      open={isUserMobileMenuOpen}
-                      anchorEl={anchorUserMobileMenuEl}
-                      onClose={handleUserMobileMenuClose}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                      }}
-                      classes={{ paper: classes.popover }}
-                    >
-                      <Typography
-                        variant="body1"
-                        className={classes.basketItem}
-                      >
-                        2 items
-                      </Typography>
-                      <MenuItem onClick={handleUserMobileMenuClose}>
-                        Go to the basket
-                      </MenuItem>
-                      <Divider />
-                      <MenuItem onClick={handleUserMobileMenuClose}>
-                        Logout
-                      </MenuItem>
-                    </Menu>
-                  </>
-                )}
-              </div>
-            </Grid>
-          </Grid>
-        </Toolbar>
-      </Container>
-    </AppBar>
+  const renderMenu = isLoggedIn ? (
+    <>
+      <IconButton
+        size="large"
+        className={classes.iconButton}
+        onClick={handleUserMenuPopoverClick}
+      >
+        <PersonIcon />
+      </IconButton>
+      <Menu
+        id={userMenuPopoverId}
+        open={isUserMenuPopoverOpen}
+        anchorEl={anchorUserMenuPopoverEl}
+        onClose={handleUserMenuPopoverClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        classes={{ paper: classes.popover }}
+      >
+        <Link to={PATH.LOGOUT} className={classes.link}>
+          <MenuItem>Logout</MenuItem>
+        </Link>
+      </Menu>
+
+      <Badge badgeContent={4} color="primary">
+        <IconButton
+          size="large"
+          className={classes.iconButton}
+          onClick={handleUserBasketPopoverClick}
+        >
+          <ShoppingBasketIcon />
+        </IconButton>
+      </Badge>
+      <Menu
+        id={userBasketPopoverId}
+        open={isUserBasketPopoverOpen}
+        anchorEl={anchorUserBasketPopoverEl}
+        onClose={handleUserBasketPopoverClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        classes={{ paper: classes.popover }}
+      >
+        <Typography variant="body1" className={classes.basketItem}>
+          2 items
+        </Typography>
+        <MenuItem onClick={handleUserMenuPopoverClose}>
+          Go to the basket
+        </MenuItem>
+      </Menu>
+    </>
+  ) : (
+    <>
+      <Link to={PATH.LOGIN}>
+        <IconButton size="large" className={classes.iconButton}>
+          <LoginIcon />
+        </IconButton>
+      </Link>
+    </>
+  )
+
+  const renderMobileMenu = isLoggedIn ? (
+    <>
+      <IconButton size="small" onClick={handleUserMobileMenuClick}>
+        <MoreIcon />
+      </IconButton>
+      <Menu
+        id={userMobileMenuId}
+        open={isUserMobileMenuOpen}
+        anchorEl={anchorUserMobileMenuEl}
+        onClose={handleUserMobileMenuClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        classes={{ paper: classes.popover }}
+      >
+        <Typography variant="body1" className={classes.basketItem}>
+          2 items
+        </Typography>
+        <MenuItem onClick={handleUserMobileMenuClose}>
+          Go to the basket
+        </MenuItem>
+        <Divider />
+        <Link to={PATH.LOGOUT} className={classes.link}>
+          <MenuItem>Logout</MenuItem>
+        </Link>
+      </Menu>
+    </>
+  ) : (
+    <>
+      <Link to={PATH.LOGIN}>
+        <IconButton size="large" className={classes.iconButton}>
+          <LoginIcon />
+        </IconButton>
+      </Link>
+    </>
+  )
+
+  return (
+    <div className={classes.links}>
+      {!isMobile && renderMenu}
+      {isMobile && renderMobileMenu}
+    </div>
   )
 }
-
-export default Header
