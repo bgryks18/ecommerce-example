@@ -1,6 +1,5 @@
 import { getSession } from '@/api/user'
 import Page from '@/components/Layout/Page'
-import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { Button, FormControl, TextField, Typography } from '@mui/material'
 import { FormGroup } from '@mui/material'
 import { makeStyles } from '@mui/styles'
@@ -35,12 +34,9 @@ const Login = () => {
   const classes = useStyles()
   const { register, handleSubmit } = useForm<IFormInput>()
   const navigate = useNavigate()
-  const { setCurrentUser } = useCurrentUser()
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
-      const token = await mutateGetSession()
-      localStorage.setItem('authorization', token)
-      setCurrentUser(token)
+      await mutateGetSession()
       navigate('/')
     } catch (e: any) {
       console.log('login error', e)
