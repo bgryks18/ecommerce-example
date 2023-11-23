@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
       flexWrap: 'wrap',
       gap: 0,
       '& .MuiMenuItem-root': {
-        flex: 1,
         columnGap: 2,
         '& span': {
           fontSize: '0.8rem',
