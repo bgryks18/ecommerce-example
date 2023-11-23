@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     overflowY: 'auto',
     [theme.breakpoints.down('md')]: {
       top: 0,
-      maxHeight: 'auto',
+      maxHeight: 'unset',
     },
   },
   paper: {
