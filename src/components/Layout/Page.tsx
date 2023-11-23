@@ -15,8 +15,8 @@ const Page = ({
   return (
     <>
       {showHeader && <Header />}
-      <Container maxWidth="xl">
-        <Grid container columnSpacing="20px">
+      <Container maxWidth="xl" sx={{ marginBottom: 5 }}>
+        <Grid container>
           {showSidebar && (
             <Grid item xs={12} md={3} paddingTop="20px">
               <Sidebar />

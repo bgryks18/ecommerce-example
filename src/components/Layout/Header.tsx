@@ -1,6 +1,7 @@
 import {
   AppBar,
   Badge,
+  Box,
   Button,
   Container,
   Divider,
@@ -24,6 +25,7 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { Link } from 'react-router-dom'
 import { PATH } from '@/types/paths'
+import { getCart } from '@/api/card'
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -173,6 +175,8 @@ const MenuLinks = () => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { isLoggedIn } = useCurrentUser()
+  const { data } = getCart()
+  const cartCount = Array.isArray(data) ? data.length : 0
 
   const [anchorUserMenuPopoverEl, setAnchorUserMenuPopoverEl] =
     useState<HTMLButtonElement | null>(null)
@@ -216,7 +220,7 @@ const MenuLinks = () => {
   const isUserMenuPopoverOpen = Boolean(anchorUserMenuPopoverEl)
   const isUserBasketPopoverOpen = Boolean(anchorUserBasketPopoverEl)
   const isUserMobileMenuOpen = Boolean(anchorUserMobileMenuEl)
-
+  console.log('data', data)
   const renderMenu = isLoggedIn ? (
     <>
       <IconButton
@@ -242,7 +246,7 @@ const MenuLinks = () => {
         </Link>
       </Menu>
 
-      <Badge badgeContent={4} color="primary">
+      <Badge badgeContent={cartCount} color="primary">
         <IconButton
           size="large"
           className={classes.iconButton}
@@ -262,12 +266,20 @@ const MenuLinks = () => {
         }}
         classes={{ paper: classes.popover }}
       >
-        <Typography variant="body1" className={classes.basketItem}>
-          2 items
-        </Typography>
-        <MenuItem onClick={handleUserMenuPopoverClose}>
-          Go to the basket
-        </MenuItem>
+        {cartCount > 0 ? (
+          <Box>
+            <Typography variant="body1" className={classes.basketItem}>
+              {cartCount} items
+            </Typography>
+            <MenuItem onClick={handleUserMenuPopoverClose}>
+              Go to the basket
+            </MenuItem>
+          </Box>
+        ) : (
+          <Typography variant="body1" className={classes.basketItem}>
+            No products in your cart
+          </Typography>
+        )}
       </Menu>
     </>
   ) : (

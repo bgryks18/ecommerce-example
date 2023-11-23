@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 auto',
     display: 'flex',
     flexDirection: 'column',
-    gap: 6,
+    gap: 12,
   },
   formGroup: {
     display: 'flex',

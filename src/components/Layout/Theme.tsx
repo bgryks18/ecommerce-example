@@ -71,9 +71,11 @@ const theme = createTheme({
         root: {
           '@media screen and (max-width:991px)': {
             minHeight: '36px',
+            padding: '4px 12px',
           },
           '@media screen and (max-width:768px)': {
             minHeight: '32px',
+            padding: '3px 9px',
           },
         },
       },

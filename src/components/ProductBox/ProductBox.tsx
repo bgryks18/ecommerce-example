@@ -77,7 +77,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const ProductBox = ({
-  id,
   image,
   name,
   originalPrice,
