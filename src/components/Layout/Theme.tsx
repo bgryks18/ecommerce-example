@@ -82,21 +82,7 @@ const theme = createTheme({
 })
 
 const Theme = ({ children }: { children: ReactNode }) => {
-  return (
-    <ThemeProvider theme={theme}>
-      <Header />
-      <Container maxWidth="xl">
-        <Grid container columnSpacing="20px">
-          <Grid item xs={12} md={3} paddingBlock="20px">
-            <Sidebar />
-          </Grid>
-          <Grid item xs={12} md={9} paddingBlock="20px">
-            {children}
-          </Grid>
-        </Grid>
-      </Container>
-    </ThemeProvider>
-  )
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>
 }
 
 export default Theme

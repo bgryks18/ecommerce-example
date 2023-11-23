@@ -10,15 +10,15 @@ import EggAltIcon from '@mui/icons-material/EggAltOutlined'
 const useStyles = makeStyles((theme) => ({
   container: {
     position: 'sticky',
-    top: 80,
+    top: 100,
     left: 0,
     padding: 0,
     maxHeight: 'calc(100vh + (-120px))',
+    overflowY: 'auto',
     [theme.breakpoints.down('md')]: {
       top: 0,
-      paddingBottom: 0,
+      maxHeight: 'auto',
     },
-    overflowY: 'auto',
   },
   paper: {
     boxShadow: 'none',
