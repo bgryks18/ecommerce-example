@@ -6,9 +6,12 @@ import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import { makeStyles } from '@mui/styles'
 import Rating from '@mui/material/Rating'
-import { ProductItemEntity } from '@/types/type'
+import { CartItemEntity, ProductItemEntity } from '@/types/type'
 import { getCurrency } from '@/utils/currency'
-
+import { MouseEvent, useMemo, useRef } from 'react'
+import { addToCart, removeFromCart } from '@/api/card'
+import { debounce } from 'lodash'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
 const useStyles = makeStyles((theme) => ({
   cardMedia: {
     maxHeight: 240,
@@ -77,6 +80,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const ProductBox = ({
+  id,
   image,
   name,
   originalPrice,
@@ -84,7 +88,9 @@ const ProductBox = ({
   rating,
   discount,
 }: ProductItemEntity) => {
+  const { cart, isLoggedIn } = useCurrentUser()
   const classes = useStyles()
+
   return (
     <Card sx={{ position: 'relative' }}>
       {discount && (
@@ -127,21 +133,7 @@ const ProductBox = ({
         </Typography>
 
         <CardActions className={classes.cardActions}>
-          <Button size="small" variant="outlined">
-            -
-          </Button>
-          <Typography
-            component="div"
-            textAlign="center"
-            sx={{ width: '32px' }}
-            variant="body2"
-            fontWeight="bold"
-          >
-            3
-          </Typography>
-          <Button size="small" variant="outlined">
-            +
-          </Button>
+          {isLoggedIn && cart && <Counter cart={cart} productId={id} />}
         </CardActions>
       </CardContent>
     </Card>
@@ -149,3 +141,104 @@ const ProductBox = ({
 }
 
 export default ProductBox
+
+const Counter = ({
+  cart,
+  productId,
+}: {
+  cart: CartItemEntity[]
+  productId: string
+}) => {
+  const countRef = useRef<HTMLDivElement>(null)
+
+  const initialCount = useMemo(
+    () =>
+      Array.isArray(cart)
+        ? cart.find((item) => item.productId === productId)?.quantity || 0
+        : 0,
+    []
+  )
+
+  const { mutateAsync: mutateAddToCart } = addToCart(productId)
+  const { mutateAsync: mutateRemoveFromCart } = removeFromCart(productId)
+
+  const increaseProduct = debounce(async () => {
+    const prevQuantityValue = Number(countRef.current?.textContent)
+    try {
+      if (countRef.current) {
+        countRef.current.textContent = String(prevQuantityValue + 1)
+      }
+
+      await mutateAddToCart()
+    } catch (e: any) {
+      console.log('error', e)
+      if (countRef.current) {
+        countRef.current.textContent = String(prevQuantityValue)
+      }
+    }
+  }, 100)
+
+  const decreaseProduct = debounce(async () => {
+    const prevQuantityValue = Number(countRef.current?.textContent)
+    try {
+      if (countRef.current) {
+        countRef.current.textContent = String(prevQuantityValue - 1)
+      }
+
+      await mutateRemoveFromCart()
+    } catch (e: any) {
+      console.log('error', e)
+      if (countRef.current) {
+        countRef.current.textContent = String(prevQuantityValue)
+      }
+    }
+  }, 100)
+
+  const handleIncrease = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    increaseProduct()
+  }
+
+  const handleDecrease = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    decreaseProduct()
+  }
+
+  return (
+    <>
+      <Button
+        size="small"
+        variant="outlined"
+        onClick={handleDecrease}
+        sx={{
+          visibility:
+            Number(countRef.current?.textContent || initialCount) >= 1
+              ? 'visible'
+              : 'hidden',
+        }}
+      >
+        -
+      </Button>
+
+      <Typography
+        component="div"
+        textAlign="center"
+        variant="body2"
+        fontWeight="bold"
+        ref={countRef}
+      >
+        {initialCount}
+      </Typography>
+      <Button
+        size="small"
+        variant="outlined"
+        onClick={handleIncrease}
+        onDoubleClick={(e) => {
+          e.preventDefault()
+        }}
+      >
+        +
+      </Button>
+    </>
+  )
+}

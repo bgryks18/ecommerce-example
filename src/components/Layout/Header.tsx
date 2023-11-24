@@ -25,7 +25,6 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { Link } from 'react-router-dom'
 import { PATH } from '@/types/paths'
-import { getCart } from '@/api/card'
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -174,9 +173,7 @@ const MenuLinks = () => {
   const userMobileMenuId = useId()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const { isLoggedIn } = useCurrentUser()
-  const { data } = getCart()
-  const cartCount = Array.isArray(data) ? data.length : 0
+  const { isLoggedIn, cartCount } = useCurrentUser()
 
   const [anchorUserMenuPopoverEl, setAnchorUserMenuPopoverEl] =
     useState<HTMLButtonElement | null>(null)
@@ -220,7 +217,7 @@ const MenuLinks = () => {
   const isUserMenuPopoverOpen = Boolean(anchorUserMenuPopoverEl)
   const isUserBasketPopoverOpen = Boolean(anchorUserBasketPopoverEl)
   const isUserMobileMenuOpen = Boolean(anchorUserMobileMenuEl)
-  console.log('data', data)
+
   const renderMenu = isLoggedIn ? (
     <>
       <IconButton

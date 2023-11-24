@@ -1,6 +1,6 @@
 export type UserSessionIdEntity = string
 
-export interface CardItemEntity {
+export interface CartItemEntity {
   productId: string
   quantity: number
   name: string

@@ -1,15 +1,16 @@
 import { useAtom, useAtomValue } from 'jotai'
-import { cardState, currentUserState, isLoggedInState } from '@/store/user'
+import { cartState, currentUserState, isLoggedInState } from '@/store/user'
 
 export const useCurrentUser = () => {
   const [curentUser, setCurrentUser] = useAtom(currentUserState)
-  const [card, setCard] = useAtom(cardState)
+  const [cart, setCart] = useAtom(cartState)
   const isLoggedIn = useAtomValue(isLoggedInState)
   return {
     curentUser,
     setCurrentUser,
     isLoggedIn,
-    card,
-    setCard,
+    cart,
+    cartCount: Array.isArray(cart) ? cart.length : 0,
+    setCart,
   }
 }

@@ -7,13 +7,13 @@ import { useNavigate } from 'react-router-dom'
 
 const Logout = () => {
   const navigate = useNavigate()
-  const { setCurrentUser } = useCurrentUser()
+  const { setCurrentUser, setCart } = useCurrentUser()
 
   useEffect(() => {
-    localStorage.removeItem('authorization')
-    setCurrentUser(null)
-
     new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
+      localStorage.removeItem('authorization')
+      setCurrentUser(null)
+      setCart(null)
       navigate(PATH.HOME)
     })
   }, [])
