@@ -9,7 +9,7 @@ export const getProducts = (searchParams?: Record<string, unknown>) => {
     queryKey: [key],
     async queryFn() {
       try {
-        const { data } = await API.get(endpoint, searchParams)
+        const { data } = await API.get(endpoint, { params: searchParams })
         return data
       } catch (e: any) {
         throw e

@@ -1,6 +1,6 @@
 import { Grid, GridSize, Typography } from '@mui/material'
 import ProductBox from '../ProductBox/ProductBox'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { getProducts } from '@/api/product'
 import { get, isEmpty } from 'lodash'
 
@@ -20,11 +20,14 @@ const ProductList = ({
   title?: string | ReactNode
   searchParams?: Record<string, unknown>
 }) => {
-  const { data = [], isFetched, isLoading } = getProducts(searchParams)
+  const { data = [], isFetched, isLoading, refetch } = getProducts(searchParams)
   const isSearchMode = !isEmpty(searchParams)
   const searchKey = get(searchParams, 'name') as unknown as string
   const isNoResult = data.length === 0 && !isLoading && isFetched
 
+  useEffect(() => {
+    refetch(searchParams)
+  }, [searchParams])
   return (
     <Grid
       container

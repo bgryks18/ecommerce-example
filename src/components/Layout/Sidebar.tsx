@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('md')]: {
       top: 0,
       maxHeight: 'unset',
-      paddingRight: 0,
+      marginRight: 0,
     },
   },
   paper: {
