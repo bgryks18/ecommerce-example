@@ -2,10 +2,12 @@ import { Grid, GridSize, Typography } from '@mui/material'
 import ProductBox from '../ProductBox/ProductBox'
 import { ReactNode } from 'react'
 import { getProducts } from '@/api/product'
+import { get, isEmpty } from 'lodash'
 
 const ProductList = ({
   title,
   gridSize = { md: 4 },
+  searchParams,
 }: {
   gridSize?: {
     xl?: GridSize
@@ -16,8 +18,12 @@ const ProductList = ({
   }
 
   title?: string | ReactNode
+  searchParams?: Record<string, unknown>
 }) => {
-  const { data = [] } = getProducts()
+  const { data = [], isFetched, isLoading } = getProducts(searchParams)
+  const isSearchMode = !isEmpty(searchParams)
+  const searchKey = get(searchParams, 'name') as unknown as string
+  const isNoResult = data.length === 0 && !isLoading && isFetched
 
   return (
     <Grid
@@ -38,6 +44,7 @@ const ProductList = ({
       >
         {title && title}
       </Typography>
+
       {data.map((item) => {
         return (
           <Grid item {...gridSize} width={'100%'} key={item.id}>
@@ -45,6 +52,30 @@ const ProductList = ({
           </Grid>
         )
       })}
+
+      {isNoResult && (
+        <Typography
+          component="div"
+          variant="h5"
+          sx={{
+            fontWeight: '500',
+            paddingInline: '20px',
+            width: '100%',
+            paddingBottom: '4px',
+          }}
+        >
+          {isSearchMode ? (
+            <Typography component="span">
+              No data found for&nbsp;
+              <Typography component="span" fontWeight="700">
+                {searchKey}
+              </Typography>
+            </Typography>
+          ) : (
+            <Typography component="span">No data found</Typography>
+          )}
+        </Typography>
+      )}
     </Grid>
   )
 }

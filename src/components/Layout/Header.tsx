@@ -23,8 +23,14 @@ import LoginIcon from '@mui/icons-material/Login'
 import { useId, useState } from 'react'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
-import { Link } from 'react-router-dom'
+import {
+  Link,
+  createSearchParams,
+  useNavigate,
+  createPath,
+} from 'react-router-dom'
 import { PATH } from '@/types/paths'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -68,9 +74,11 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
       height: '100%',
       borderRadius: 50,
-      paddingRight: '0',
+      paddingRight: 0,
+
       '& input': {
         padding: 4,
+        marginRight: 4,
       },
     },
     [theme.breakpoints.down('md')]: {
@@ -136,24 +144,8 @@ const Header = () => {
               </div>
             </Grid>
             <Grid item xs={8} md={6}>
-              <div className={classes.searchBox}>
-                <OutlinedInput
-                  size="medium"
-                  margin="none"
-                  placeholder="Searching for"
-                  startAdornment={<SearchIcon color={'action'} />}
-                  endAdornment={
-                    <Button
-                      variant="contained"
-                      className={classes.searchButton}
-                    >
-                      Search
-                    </Button>
-                  }
-                />
-              </div>
+              <SearchForm />
             </Grid>
-
             <Grid item xs={2} md={3}>
               <MenuLinks />
             </Grid>
@@ -332,5 +324,46 @@ const MenuLinks = () => {
       {!isMobile && renderMenu}
       {isMobile && renderMobileMenu}
     </div>
+  )
+}
+
+interface SearchFormProps {
+  q: string
+}
+const SearchForm = () => {
+  const { register, handleSubmit } = useForm<SearchFormProps>()
+  const navigate = useNavigate()
+
+  const onSubmit: SubmitHandler<SearchFormProps> = async (data) => {
+    const searchParams = createSearchParams(data as any)
+
+    const createdPath = createPath({
+      pathname: PATH.SEARCH,
+      search: searchParams.toString(),
+    })
+
+    navigate(createdPath)
+  }
+
+  const classes = useStyles()
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className={classes.searchBox}>
+      <OutlinedInput
+        size="medium"
+        margin="none"
+        placeholder="Searching for"
+        startAdornment={<SearchIcon color={'action'} />}
+        endAdornment={
+          <Button
+            variant="contained"
+            className={classes.searchButton}
+            type="submit"
+          >
+            Search
+          </Button>
+        }
+        {...register('q')}
+      />
+    </form>
   )
 }
