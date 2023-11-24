@@ -9,7 +9,7 @@ import EggAltIcon from '@mui/icons-material/EggAltOutlined'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    paddingRight: 36,
+    marginRight: 36,
     position: 'sticky',
     top: 100,
     left: 0,
