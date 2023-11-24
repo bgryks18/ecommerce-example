@@ -5,7 +5,7 @@ import axios, {
 } from 'axios'
 import qs from 'qs'
 
-export const API_URL = import.meta.env.VITE_API_URL
+const API_URL = import.meta.env.VITE_API_URL
 
 const API = axios.create({
   baseURL: API_URL,
@@ -17,7 +17,6 @@ const API = axios.create({
 const requestBefore = (
   config: InternalAxiosRequestConfig
 ): InternalAxiosRequestConfig => {
-  const { params = {} } = config
   const token = localStorage.getItem('authorization')
   if (token) {
     config.headers['Session-ID'] = token
@@ -29,7 +28,7 @@ const requestError = (error: AxiosError): Promise<AxiosError> =>
   Promise.reject(error)
 
 const responseBefore = (response: AxiosResponse): AxiosResponse => {
-  const token = response?.headers?.authorization
+  const token = response?.headers['Session-ID']
   if (token) localStorage.setItem('authorization', token)
   return response
 }

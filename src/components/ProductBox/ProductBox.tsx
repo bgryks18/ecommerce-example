@@ -8,10 +8,11 @@ import { makeStyles } from '@mui/styles'
 import Rating from '@mui/material/Rating'
 import { CartItemEntity, ProductItemEntity } from '@/types/type'
 import { getCurrency } from '@/utils/currency'
-import { MouseEvent, useMemo, useRef } from 'react'
+import { MouseEvent, useMemo, useRef, useState } from 'react'
 import { addToCart, removeFromCart } from '@/api/card'
 import { debounce } from 'lodash'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { Snackbar, useTheme } from '@mui/material'
 const useStyles = makeStyles((theme) => ({
   cardMedia: {
     maxHeight: 240,
@@ -149,6 +150,10 @@ const Counter = ({
   cart: CartItemEntity[]
   productId: string
 }) => {
+  const theme = useTheme()
+
+  const [errorBoxOpen, setErrorBoxOpen] = useState(false)
+
   const countRef = useRef<HTMLDivElement>(null)
 
   const initialCount = useMemo(
@@ -172,6 +177,7 @@ const Counter = ({
       await mutateAddToCart()
     } catch (e: any) {
       console.log('error', e)
+      setErrorBoxOpen(true)
       if (countRef.current) {
         countRef.current.textContent = String(prevQuantityValue)
       }
@@ -239,6 +245,16 @@ const Counter = ({
       >
         +
       </Button>
+      <Snackbar
+        open={errorBoxOpen}
+        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+        autoHideDuration={5000}
+        ContentProps={{ style: { background: theme.palette.error.main } }}
+        onClose={() => {
+          setErrorBoxOpen(false)
+        }}
+        message="An error occured"
+      />
     </>
   )
 }
