@@ -3,6 +3,7 @@ import ProductBox from '../ProductBox/ProductBox'
 import { ReactNode, useEffect } from 'react'
 import { getProducts } from '@/api/product'
 import { get, isEmpty } from 'lodash'
+import ProductBoxSkeleton from '@/components/Layout/Skeleton/ProductBoxSkeleton'
 
 const ProductList = ({
   title,
@@ -22,8 +23,10 @@ const ProductList = ({
 }) => {
   const { data = [], isFetched, isLoading, refetch } = getProducts(searchParams)
   const isSearchMode = !isEmpty(searchParams)
-  const searchKey = get(searchParams, 'name') as unknown as string
+  const searchKey = get(searchParams, 'name') as string
   const isNoResult = data.length === 0 && !isLoading && isFetched
+  const showSkeleton =
+    data.length === 0 && isLoading && !isFetched && !isSearchMode
 
   useEffect(() => {
     refetch(searchParams)
@@ -47,6 +50,15 @@ const ProductList = ({
       >
         {title && title}
       </Typography>
+
+      {showSkeleton &&
+        Array(3)
+          .fill(null)
+          .map((item, key) => (
+            <Grid item {...gridSize} width={'100%'} key={key}>
+              <ProductBoxSkeleton />
+            </Grid>
+          ))}
 
       {data.map((item) => {
         return (

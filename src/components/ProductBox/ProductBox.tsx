@@ -14,6 +14,18 @@ import { debounce } from 'lodash'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { Snackbar, useTheme } from '@mui/material'
 const useStyles = makeStyles((theme) => ({
+  container: {
+    position: 'relative',
+    animation: `$showProductBox 300ms ${theme.transitions.easing.easeInOut}`,
+  },
+  '@keyframes showProductBox': {
+    '0%': {
+      opacity: 0,
+    },
+    '100%': {
+      opacity: 1,
+    },
+  },
   cardMedia: {
     maxHeight: 240,
     backgroundSize: 'contain',
@@ -93,7 +105,7 @@ const ProductBox = ({
   const classes = useStyles()
 
   return (
-    <Card sx={{ position: 'relative' }}>
+    <Card className={classes.container}>
       {discount && (
         <Typography className={classes.discountButton}>{discount}</Typography>
       )}
