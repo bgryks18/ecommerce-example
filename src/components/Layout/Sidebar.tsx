@@ -33,13 +33,16 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
       alignItems: 'center',
       columnGap: 8,
+      padding: '4px 12px',
     },
     [theme.breakpoints.down('md')]: {
       display: 'flex',
       flexDirection: 'row',
       flexWrap: 'wrap',
       gap: 0,
+      paddingBottom: 6,
       '& .MuiMenuItem-root': {
+        padding: '2px 9px',
         columnGap: 2,
         '& span': {
           fontSize: '0.8rem',

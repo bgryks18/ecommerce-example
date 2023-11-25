@@ -1,9 +1,7 @@
-import { Container, Grid, createTheme } from '@mui/material'
+import { createTheme } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
 import { Theme as ThemeType } from '@mui/material/styles'
 import { ReactNode } from 'react'
-import Header from './Header'
-import Sidebar from './Sidebar'
 
 const theme = createTheme({
   typography: {
@@ -71,11 +69,9 @@ const theme = createTheme({
         root: {
           '@media screen and (max-width:991px)': {
             minHeight: '36px',
-            padding: '4px 12px',
           },
           '@media screen and (max-width:768px)': {
             minHeight: '32px',
-            padding: '3px 9px',
           },
         },
       },

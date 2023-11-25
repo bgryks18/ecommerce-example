@@ -16,8 +16,8 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import SearchIcon from '@mui/icons-material/Search'
-import PersonIcon from '@mui/icons-material/Person'
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
+import PersonIcon from '@mui/icons-material/PersonOutlined'
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasketOutlined'
 import MoreIcon from '@mui/icons-material/MoreVert'
 import LoginIcon from '@mui/icons-material/Login'
 import { useId, useState } from 'react'
@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    [theme.breakpoints.down('md')]: {
+      boxShadow: '0.5px 0.5px 2px #ddd',
+    },
   },
   toolBar: {
     color: theme.palette.common.black,
@@ -59,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.down('md')]: {
       '& img': {
-        width: 60,
+        width: 55,
         maxWidth: '100%',
         aspectRatio: '1/1',
       },
@@ -116,8 +119,11 @@ const useStyles = makeStyles((theme) => ({
   popover: {
     width: '300px',
   },
-  basketItem: {
+  menuItem: {
     padding: '6px 16px',
+    [theme.breakpoints.down('md')]: {
+      padding: '3px 9px',
+    },
   },
 }))
 
@@ -125,11 +131,10 @@ const Header = () => {
   const classes = useStyles()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const appBarPosition = isMobile ? 'relative' : 'sticky'
   const logoUrl = isMobile ? '/favicon.png' : '/logo.png'
 
   return (
-    <AppBar className={classes.appBar} position={appBarPosition}>
+    <AppBar className={classes.appBar} position={'sticky'}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Grid
@@ -233,7 +238,7 @@ const MenuLinks = () => {
         classes={{ paper: classes.popover }}
       >
         <Link to={PATH.LOGOUT} className={classes.link}>
-          <MenuItem>Logout</MenuItem>
+          <MenuItem className={classes.menuItem}>Logout</MenuItem>
         </Link>
       </Menu>
 
@@ -259,15 +264,18 @@ const MenuLinks = () => {
       >
         {cartCount > 0 ? (
           <Box>
-            <Typography variant="body1" className={classes.basketItem}>
-              {cartCount} items
+            <Typography variant="body1" className={classes.menuItem}>
+              {cartCount === 1 ? `${cartCount} item` : `${cartCount} items`}
             </Typography>
-            <MenuItem onClick={handleUserMenuPopoverClose}>
+            <MenuItem
+              onClick={handleUserMenuPopoverClose}
+              className={classes.menuItem}
+            >
               Go to the basket
             </MenuItem>
           </Box>
         ) : (
-          <Typography variant="body1" className={classes.basketItem}>
+          <Typography variant="body1" className={classes.menuItem}>
             No products in your cart
           </Typography>
         )}
@@ -299,15 +307,18 @@ const MenuLinks = () => {
         }}
         classes={{ paper: classes.popover }}
       >
-        <Typography variant="body1" className={classes.basketItem}>
-          2 items
+        <Typography variant="body1" className={classes.menuItem}>
+          {cartCount === 1 ? `${cartCount} item` : `${cartCount} items`}
         </Typography>
-        <MenuItem onClick={handleUserMobileMenuClose}>
+        <MenuItem
+          onClick={handleUserMobileMenuClose}
+          className={classes.menuItem}
+        >
           Go to the basket
         </MenuItem>
         <Divider />
         <Link to={PATH.LOGOUT} className={classes.link}>
-          <MenuItem>Logout</MenuItem>
+          <MenuItem className={classes.menuItem}>Logout</MenuItem>
         </Link>
       </Menu>
     </>
