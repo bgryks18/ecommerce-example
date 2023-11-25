@@ -9,8 +9,10 @@ export const useCurrentUser = () => {
     curentUser,
     setCurrentUser,
     isLoggedIn,
-    cart,
-    cartCount: Array.isArray(cart) ? cart.length : 0,
+    cart: cart ? cart.filter((item) => item.quantity > 1) : null,
+    cartCount: Array.isArray(cart)
+      ? cart.filter((item) => item.quantity > 1).length
+      : 0,
     setCart,
   }
 }
