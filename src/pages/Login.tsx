@@ -44,7 +44,9 @@ const Login = () => {
     } catch (e: any) {
       console.log('login error', e)
       setError(
-        typeof e?.response?.data === 'string' ? e?.response?.data : e?.message
+        e?.response?.data && typeof e?.response?.data === 'string'
+          ? e?.response?.data
+          : e?.message
       )
     }
   }

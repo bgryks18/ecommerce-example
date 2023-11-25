@@ -207,7 +207,9 @@ const Counter = ({
     } catch (e: any) {
       console.log('error', e)
       setError(
-        typeof e?.response?.data === 'string' ? e?.response?.data : e?.message
+        e?.response?.data && typeof e?.response?.data === 'string'
+          ? e?.response?.data
+          : e?.message
       )
       if (countRef.current) {
         countRef.current.textContent = String(prevQuantityValue)
@@ -228,7 +230,9 @@ const Counter = ({
     } catch (e: any) {
       console.log('error', e)
       setError(
-        typeof e?.response?.data === 'string' ? e?.response?.data : e?.message
+        e?.response?.data && typeof e?.response?.data === 'string'
+          ? e?.response?.data
+          : e?.message
       )
       if (countRef.current) {
         countRef.current.textContent = String(prevQuantityValue)
