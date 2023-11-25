@@ -9,7 +9,7 @@ export const useCurrentUser = () => {
     curentUser,
     setCurrentUser,
     isLoggedIn,
-    cart: Array.isArray(cart) ? cart.filter((item) => item.quantity > 0) : [],
+    cart: Array.isArray(cart) ? cart.filter((item) => item.quantity > 0) : cart,
     cartCount: Array.isArray(cart)
       ? cart.filter((item) => item.quantity > 0).length
       : 0,
