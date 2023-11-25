@@ -93,6 +93,7 @@ const useStyles = makeStyles((theme) => ({
     borderBottomLeftRadius: '0',
     border: '0',
     width: '170px',
+    textTransform: 'none',
     [theme.breakpoints.down('md')]: {
       height: '38px',
       width: 'auto',
