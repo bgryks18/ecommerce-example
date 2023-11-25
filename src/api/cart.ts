@@ -8,7 +8,7 @@ export const useAddToCart = (id: string) => {
   return useMutation<CartItemEntity>(
     async () => {
       await API.post(
-        '/add-asdasdto-cart',
+        '/add-to-cart',
         {},
         {
           params: {
