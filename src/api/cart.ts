@@ -76,5 +76,7 @@ export const getCart = () => {
       }
     },
     retry: false,
+    refetchOnReconnect: true,
+    refetchOnWindowFocus: false,
   })
 }

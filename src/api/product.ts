@@ -16,5 +16,7 @@ export const getProducts = (searchParams?: Record<string, unknown>) => {
       }
     },
     retry: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
   })
 }

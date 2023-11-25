@@ -28,6 +28,7 @@ import {
   createSearchParams,
   useNavigate,
   createPath,
+  useSearchParams,
 } from 'react-router-dom'
 import { PATH } from '@/types/paths'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -333,8 +334,16 @@ interface SearchFormProps {
 const SearchForm = () => {
   const { register, handleSubmit } = useForm<SearchFormProps>()
   const navigate = useNavigate()
+  const [currentSearchParamms] = useSearchParams()
 
   const onSubmit: SubmitHandler<SearchFormProps> = async (data) => {
+    const currentQuery = currentSearchParamms.get('q')
+    if (
+      (!currentQuery && !data.q.trim()) ||
+      (currentQuery && currentQuery.trim() === data.q.trim())
+    ) {
+      return
+    }
     const searchParams = createSearchParams(data as any)
 
     const createdPath = createPath({
@@ -353,6 +362,7 @@ const SearchForm = () => {
         margin="none"
         placeholder="Searching for"
         startAdornment={<SearchIcon color={'action'} />}
+        defaultValue={currentSearchParamms.get('q')}
         endAdornment={
           <Button
             variant="contained"

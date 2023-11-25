@@ -1,5 +1,5 @@
 import { Grid, GridSize, Typography } from '@mui/material'
-import ProductBox from '../ProductBox/ProductBox'
+import ProductBox from '@/components/ProductBox/ProductBox'
 import { ReactNode, useEffect } from 'react'
 import { getProducts } from '@/api/product'
 import { get, isEmpty } from 'lodash'
@@ -21,16 +21,25 @@ const ProductList = ({
   title?: string | ReactNode
   searchParams?: Record<string, unknown>
 }) => {
-  const { data = [], isFetched, isLoading, refetch } = getProducts(searchParams)
+  const {
+    data = [],
+    isFetched,
+    isLoading,
+    refetch,
+    isRefetching,
+    isFetching,
+  } = getProducts(searchParams)
   const isSearchMode = !isEmpty(searchParams)
   const searchKey = get(searchParams, 'name') as string
-  const isNoResult = data.length === 0 && !isLoading && isFetched
+  const isNoResult =
+    data.length === 0 && !isLoading && isFetched && !isRefetching && !isFetching
   const showSkeleton =
-    data.length === 0 && isLoading && !isFetched && !isSearchMode
-
+    data.length === 0 && (isLoading || isRefetching || isFetching)
+  const showdData = !isLoading && !isRefetching && !isFetching
   useEffect(() => {
     refetch(searchParams)
   }, [searchParams])
+
   return (
     <Grid
       container
@@ -60,13 +69,14 @@ const ProductList = ({
             </Grid>
           ))}
 
-      {data.map((item) => {
-        return (
-          <Grid item {...gridSize} width={'100%'} key={item.id}>
-            <ProductBox {...item} />
-          </Grid>
-        )
-      })}
+      {showdData &&
+        data.map((item) => {
+          return (
+            <Grid item {...gridSize} width={'100%'} key={item.id}>
+              <ProductBox {...item} />
+            </Grid>
+          )
+        })}
 
       {isNoResult && (
         <Typography
