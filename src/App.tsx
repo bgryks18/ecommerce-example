@@ -9,6 +9,7 @@ import { getCart } from './api/card'
 
 function App() {
   getCart()
+
   return (
     <Routes>
       <Route path={PATH.HOME} element={<Home />}></Route>
