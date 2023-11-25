@@ -1,7 +1,7 @@
 import { Grid, GridSize, Typography } from '@mui/material'
 import ProductBox from '@/components/ProductBox/ProductBox'
 import { ReactNode, useEffect } from 'react'
-import { getProducts } from '@/api/product'
+import { useGetProducts } from '@/api/product'
 import { get, isEmpty } from 'lodash'
 import ProductBoxSkeleton from '@/components/Layout/Skeleton/ProductBoxSkeleton'
 
@@ -28,7 +28,7 @@ const ProductList = ({
     refetch,
     isRefetching,
     isFetching,
-  } = getProducts(searchParams)
+  } = useGetProducts(searchParams)
   const isSearchMode = !isEmpty(searchParams)
   const searchKey = get(searchParams, 'name') as string
   const isNoResult =

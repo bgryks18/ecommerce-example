@@ -5,7 +5,7 @@ import Login from './pages/Login'
 import Search from './pages/Search'
 import Notfound from './pages/Notfound'
 import { PATH } from './types/paths'
-import { getCart } from './api/cart'
+import { useGetCart } from './api/cart'
 import { Snackbar } from '@mui/material'
 import { useTheme } from '@mui/styles'
 import { useAtom } from 'jotai'
@@ -14,7 +14,7 @@ import { errorState } from './store/ui'
 function App() {
   const theme = useTheme()
   const [error, setError] = useAtom(errorState)
-  getCart()
+  useGetCart()
 
   return (
     <>

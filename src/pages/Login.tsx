@@ -1,4 +1,4 @@
-import { getSession } from '@/api/user'
+import { useGetSession } from '@/api/user'
 import Page from '@/components/Layout/Page'
 import { Button, FormControl, TextField, Typography } from '@mui/material'
 import { FormGroup } from '@mui/material'
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 const Login = () => {
-  const { mutateAsync: mutateGetSession, isLoading } = getSession()
+  const { mutateAsync: mutateGetSession, isLoading } = useGetSession()
   const classes = useStyles()
   const { register, handleSubmit } = useForm<IFormInput>()
   const navigate = useNavigate()

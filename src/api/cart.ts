@@ -3,29 +3,25 @@ import { CartItemEntity } from '@/types/type'
 import API from '@/utils/axios'
 import { useMutation, useQuery } from 'react-query'
 
-export const addToCart = (id: string) => {
+export const useAddToCart = (id: string) => {
   const { setCart } = useCurrentUser()
   return useMutation<CartItemEntity>(
     async () => {
-      try {
-        await API.post(
-          '/add-to-cart',
-          {},
-          {
-            params: {
-              id,
-            },
-          }
-        )
-        const { data: cardData }: { data: CartItemEntity[] } = await API.get(
-          '/view-cart'
-        )
-        setCart(cardData)
-        const updatedItem = cardData.find((item) => item.productId === id)
-        return updatedItem as CartItemEntity
-      } catch (e: any) {
-        throw e
-      }
+      await API.post(
+        '/add-asdasdto-cart',
+        {},
+        {
+          params: {
+            id,
+          },
+        }
+      )
+      const { data: cardData }: { data: CartItemEntity[] } = await API.get(
+        '/view-cart'
+      )
+      setCart(cardData)
+      const updatedItem = cardData.find((item) => item.productId === id)
+      return updatedItem as CartItemEntity
     },
     {
       retry: false,
@@ -33,28 +29,24 @@ export const addToCart = (id: string) => {
   )
 }
 
-export const removeFromCart = (id: string) => {
+export const useRemoveFromCart = (id: string) => {
   const { setCart } = useCurrentUser()
   return useMutation<CartItemEntity[]>(
     async () => {
-      try {
-        await API.post(
-          '/subtract-from-cart',
-          {},
-          {
-            params: {
-              id,
-            },
-          }
-        )
-        const { data: cardData }: { data: CartItemEntity[] } = await API.get(
-          '/view-cart'
-        )
-        setCart(cardData)
-        return cardData
-      } catch (e: any) {
-        throw e
-      }
+      await API.post(
+        '/subtract-from-cart',
+        {},
+        {
+          params: {
+            id,
+          },
+        }
+      )
+      const { data: cardData }: { data: CartItemEntity[] } = await API.get(
+        '/view-cart'
+      )
+      setCart(cardData)
+      return cardData
     },
     {
       retry: false,
@@ -62,18 +54,14 @@ export const removeFromCart = (id: string) => {
   )
 }
 
-export const getCart = () => {
+export const useGetCart = () => {
   const { setCart } = useCurrentUser()
   return useQuery<CartItemEntity[]>({
     queryKey: ['get-cart'],
     async queryFn() {
-      try {
-        const { data } = await API.get('/view-cart')
-        setCart(data)
-        return data
-      } catch (e: any) {
-        throw e
-      }
+      const { data } = await API.get('/view-cart')
+      setCart(data)
+      return data
     },
     retry: false,
     refetchOnReconnect: true,

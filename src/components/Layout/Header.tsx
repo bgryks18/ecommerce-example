@@ -357,7 +357,9 @@ const SearchForm = () => {
     ) {
       return
     }
-    const searchParams = createSearchParams(data as any)
+    const searchParams = createSearchParams(
+      data as unknown as Record<string, string>
+    )
 
     const createdPath = createPath({
       pathname: PATH.SEARCH,

@@ -9,7 +9,7 @@ import Rating from '@mui/material/Rating'
 import { CartItemEntity, ProductItemEntity } from '@/types/type'
 import { getCurrency } from '@/utils/currency'
 import { MouseEvent, useEffect, useMemo, useRef, useState } from 'react'
-import { addToCart, removeFromCart } from '@/api/cart'
+import { useAddToCart, useRemoveFromCart } from '@/api/cart'
 import { debounce } from 'lodash'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { useSetAtom } from 'jotai'
@@ -192,8 +192,8 @@ const Counter = ({
     }
   }, [currentCount])
 
-  const { mutateAsync: mutateAddToCart } = addToCart(productId)
-  const { mutateAsync: mutateRemoveFromCart } = removeFromCart(productId)
+  const { mutateAsync: mutateAddToCart } = useAddToCart(productId)
+  const { mutateAsync: mutateRemoveFromCart } = useRemoveFromCart(productId)
 
   const increaseProduct = debounce(async () => {
     if (!countRef.current) return
