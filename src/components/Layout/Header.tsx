@@ -95,11 +95,12 @@ const useStyles = makeStyles((theme) => ({
     borderTopLeftRadius: '0',
     borderBottomLeftRadius: '0',
     border: '0',
-    width: '170px',
+    minWidth: '118px',
     textTransform: 'none',
     [theme.breakpoints.down('md')]: {
       height: '38px',
-      width: 'auto',
+      minWidth: 'auto',
+      maxWidth: '90px',
     },
   },
   links: {
