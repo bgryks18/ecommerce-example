@@ -28,6 +28,7 @@ const ProductList = ({
     refetch,
     isRefetching,
     isFetching,
+    error,
   } = useGetProducts(searchParams)
   const isSearchMode = !isEmpty(searchParams)
   const searchKey = get(searchParams, 'name') as string
@@ -89,7 +90,11 @@ const ProductList = ({
             paddingBottom: '4px',
           }}
         >
-          {isSearchMode ? (
+          {error ? (
+            <Typography component="span">
+              An error occured on the server
+            </Typography>
+          ) : isSearchMode ? (
             <Typography component="span">
               No data found for&nbsp;
               <Typography component="span" fontWeight="700">

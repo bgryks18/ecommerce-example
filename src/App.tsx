@@ -30,7 +30,12 @@ function App() {
         open={Boolean(error)}
         anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
         autoHideDuration={5000}
-        ContentProps={{ style: { background: theme.palette.error.main } }}
+        ContentProps={{
+          style: {
+            background: theme.palette.error.main,
+            justifyContent: 'center',
+          },
+        }}
         onClose={() => {
           setError('')
         }}
