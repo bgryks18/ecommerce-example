@@ -36,7 +36,7 @@ const ProductList = ({
     data.length === 0 && !isLoading && isFetched && !isRefetching && !isFetching
   const showSkeleton =
     data.length === 0 && (isLoading || isRefetching || isFetching)
-  const showdData = !isLoading && !isRefetching && !isFetching
+  const showdData = !isLoading && !isRefetching && !isFetching && !isNoResult
   useEffect(() => {
     refetch(searchParams)
   }, [searchParams])
@@ -60,7 +60,20 @@ const ProductList = ({
       >
         {title && title}
       </Typography>
-
+      {isSearchMode && showdData && (
+        <Typography
+          component="h2"
+          variant="h5"
+          sx={{
+            fontWeight: '600',
+            paddingInline: '20px',
+            width: '100%',
+            paddingBottom: '4px',
+          }}
+        >
+          {data.length} {data.length === 1 ? `result` : `results`}
+        </Typography>
+      )}
       {showSkeleton &&
         Array(3)
           .fill(null)
