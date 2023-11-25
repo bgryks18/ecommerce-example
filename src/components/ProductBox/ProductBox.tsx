@@ -156,7 +156,7 @@ const Counter = ({
 
   const countRef = useRef<HTMLDivElement>(null)
 
-  const initialCount = useMemo(
+  const initialCount = useMemo<number>(
     () =>
       Array.isArray(cart)
         ? cart.find((item) => item.productId === productId)?.quantity || 0
@@ -168,11 +168,11 @@ const Counter = ({
   const { mutateAsync: mutateRemoveFromCart } = removeFromCart(productId)
 
   const increaseProduct = debounce(async () => {
-    const prevQuantityValue = Number(countRef.current?.textContent)
+    if (!countRef.current) return
+    const prevQuantityValue = Number(countRef.current.textContent)
+    const newQuantityValue = Number(countRef.current.textContent) + 1
     try {
-      if (countRef.current) {
-        countRef.current.textContent = String(prevQuantityValue + 1)
-      }
+      countRef.current.textContent = String(newQuantityValue)
 
       await mutateAddToCart()
     } catch (e: any) {
@@ -182,23 +182,25 @@ const Counter = ({
         countRef.current.textContent = String(prevQuantityValue)
       }
     }
-  }, 100)
+  }, 120)
 
   const decreaseProduct = debounce(async () => {
+    if (!countRef.current) return
     const prevQuantityValue = Number(countRef.current?.textContent)
+    const newQuantityValue = Number(countRef.current.textContent) - 1
+
     try {
-      if (countRef.current) {
-        countRef.current.textContent = String(prevQuantityValue - 1)
-      }
+      countRef.current.textContent = String(newQuantityValue)
 
       await mutateRemoveFromCart()
     } catch (e: any) {
       console.log('error', e)
+      setErrorBoxOpen(true)
       if (countRef.current) {
         countRef.current.textContent = String(prevQuantityValue)
       }
     }
-  }, 100)
+  }, 120)
 
   const handleIncrease = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
