@@ -6,6 +6,8 @@ import { makeStyles } from '@mui/styles'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress'
+import { useSetAtom } from 'jotai'
+import { errorState } from '@/store/ui'
 
 interface IFormInput {
   email: string
@@ -31,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 const Login = () => {
   const { mutateAsync: mutateGetSession, isLoading } = useGetSession()
+  const setError = useSetAtom(errorState)
   const classes = useStyles()
   const { register, handleSubmit } = useForm<IFormInput>()
   const navigate = useNavigate()
@@ -40,6 +43,9 @@ const Login = () => {
       navigate('/')
     } catch (e: any) {
       console.log('login error', e)
+      setError(
+        typeof e?.response?.data === 'string' ? e?.response?.data : e?.message
+      )
     }
   }
 
