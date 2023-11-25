@@ -8,11 +8,13 @@ import { makeStyles } from '@mui/styles'
 import Rating from '@mui/material/Rating'
 import { CartItemEntity, ProductItemEntity } from '@/types/type'
 import { getCurrency } from '@/utils/currency'
-import { MouseEvent, useMemo, useRef, useState } from 'react'
+import { MouseEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { addToCart, removeFromCart } from '@/api/card'
 import { debounce } from 'lodash'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
-import { Snackbar, useTheme } from '@mui/material'
+import { useSetAtom } from 'jotai'
+import { errorState } from '@/store/ui'
+
 const useStyles = makeStyles((theme) => ({
   container: {
     position: 'relative',
@@ -162,11 +164,15 @@ const Counter = ({
   cart: CartItemEntity[]
   productId: string
 }) => {
-  const theme = useTheme()
-
-  const [errorBoxOpen, setErrorBoxOpen] = useState(false)
+  const [isInitialized, setIsInitialized] = useState(false)
 
   const countRef = useRef<HTMLDivElement>(null)
+
+  const setError = useSetAtom(errorState)
+
+  const currentCount = Array.isArray(cart)
+    ? cart.find((item) => item.productId === productId)?.quantity || 0
+    : 0
 
   const initialCount = useMemo<number>(
     () =>
@@ -176,11 +182,22 @@ const Counter = ({
     []
   )
 
+  useEffect(() => {
+    if (
+      countRef.current &&
+      currentCount !== Number(countRef.current?.textContent) &&
+      !isInitialized
+    ) {
+      countRef.current.textContent = String(currentCount)
+    }
+  }, [currentCount])
+
   const { mutateAsync: mutateAddToCart } = addToCart(productId)
   const { mutateAsync: mutateRemoveFromCart } = removeFromCart(productId)
 
   const increaseProduct = debounce(async () => {
     if (!countRef.current) return
+    if (!isInitialized) setIsInitialized(true)
     const prevQuantityValue = Number(countRef.current.textContent)
     const newQuantityValue = Number(countRef.current.textContent) + 1
     try {
@@ -189,30 +206,35 @@ const Counter = ({
       await mutateAddToCart()
     } catch (e: any) {
       console.log('error', e)
-      setErrorBoxOpen(true)
+      setError(
+        typeof e?.response?.data === 'string' ? e?.response?.data : e?.message
+      )
       if (countRef.current) {
         countRef.current.textContent = String(prevQuantityValue)
       }
     }
-  }, 120)
+  }, 0)
 
   const decreaseProduct = debounce(async () => {
     if (!countRef.current) return
+    if (!isInitialized) setIsInitialized(true)
     const prevQuantityValue = Number(countRef.current?.textContent)
     const newQuantityValue = Number(countRef.current.textContent) - 1
-
+    if (prevQuantityValue === 0) return
     try {
       countRef.current.textContent = String(newQuantityValue)
 
       await mutateRemoveFromCart()
     } catch (e: any) {
       console.log('error', e)
-      setErrorBoxOpen(true)
+      setError(
+        typeof e?.response?.data === 'string' ? e?.response?.data : e?.message
+      )
       if (countRef.current) {
         countRef.current.textContent = String(prevQuantityValue)
       }
     }
-  }, 120)
+  }, 0)
 
   const handleIncrease = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -235,6 +257,9 @@ const Counter = ({
             Number(countRef.current?.textContent || initialCount) >= 1
               ? 'visible'
               : 'hidden',
+        }}
+        onDoubleClick={(e) => {
+          e.preventDefault()
         }}
       >
         -
@@ -259,16 +284,6 @@ const Counter = ({
       >
         +
       </Button>
-      <Snackbar
-        open={errorBoxOpen}
-        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-        autoHideDuration={5000}
-        ContentProps={{ style: { background: theme.palette.error.main } }}
-        onClose={() => {
-          setErrorBoxOpen(false)
-        }}
-        message="An error occured"
-      />
     </>
   )
 }
