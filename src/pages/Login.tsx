@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     gap: 12,
   },
   sendButton: {
+    textTransform: 'none',
     gap: 6,
   },
 }))

@@ -13,6 +13,11 @@ export const useCurrentUser = () => {
     cartCount: Array.isArray(cart)
       ? cart.filter((item) => item.quantity > 0).length
       : 0,
+    cartTotal: Array.isArray(cart)
+      ? cart
+          .map((item) => item.quantity * item.price)
+          .reduce((prev, current) => prev + current, 0)
+      : 0,
     setCart,
   }
 }

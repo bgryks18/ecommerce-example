@@ -32,6 +32,7 @@ import {
 } from 'react-router-dom'
 import { PATH } from '@/types/paths'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { getCurrency } from '@/utils/currency'
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -122,9 +123,22 @@ const useStyles = makeStyles((theme) => ({
   },
   menuItem: {
     padding: '6px 16px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    minHeight: '30px',
     [theme.breakpoints.down('md')]: {
       padding: '3px 9px',
     },
+  },
+  quantity: {
+    fontSize: '14px',
+    fontWeight: '600',
+  },
+  price: {
+    fontSize: '14px',
+    fontWeight: '600',
+    color: theme.palette.secondary.main,
   },
 }))
 
@@ -173,7 +187,7 @@ const MenuLinks = () => {
   const userMobileMenuId = useId()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const { isLoggedIn, cartCount } = useCurrentUser()
+  const { isLoggedIn, cartCount, cart, cartTotal } = useCurrentUser()
 
   const [anchorUserMenuPopoverEl, setAnchorUserMenuPopoverEl] =
     useState<HTMLButtonElement | null>(null)
@@ -217,6 +231,26 @@ const MenuLinks = () => {
   const isUserMenuPopoverOpen = Boolean(anchorUserMenuPopoverEl)
   const isUserBasketPopoverOpen = Boolean(anchorUserBasketPopoverEl)
   const isUserMobileMenuOpen = Boolean(anchorUserMobileMenuEl)
+
+  const cartItems = Array.isArray(cart) ? (
+    cart.map((item) => (
+      <Typography
+        variant="body1"
+        component="div"
+        className={classes.menuItem}
+        key={item.productId}
+      >
+        <span className={classes.quantity}>
+          {item.quantity} {item.name}
+        </span>
+        <span className={classes.price}>
+          {getCurrency(item.price * item.quantity)}
+        </span>
+      </Typography>
+    ))
+  ) : (
+    <></>
+  )
 
   const renderMenu = isLoggedIn ? (
     <>
@@ -265,18 +299,31 @@ const MenuLinks = () => {
       >
         {cartCount > 0 ? (
           <Box>
-            <Typography variant="body1" className={classes.menuItem}>
-              {cartCount === 1 ? `${cartCount} item` : `${cartCount} items`}
+            {cartItems}
+            <Divider />
+            <Typography
+              variant="body1"
+              component="div"
+              className={classes.menuItem}
+            >
+              <span className={classes.quantity}>Total</span>
+              <span className={classes.price}>{getCurrency(cartTotal)}</span>
             </Typography>
             <MenuItem
               onClick={handleUserMenuPopoverClose}
               className={classes.menuItem}
             >
-              Go to the basket
+              <Typography variant="body2" fontWeight="600" component="span">
+                Go to cart
+              </Typography>
             </MenuItem>
           </Box>
         ) : (
-          <Typography variant="body1" className={classes.menuItem}>
+          <Typography
+            variant="body1"
+            className={classes.menuItem}
+            component="div"
+          >
             No products in your cart
           </Typography>
         )}
@@ -294,9 +341,16 @@ const MenuLinks = () => {
 
   const renderMobileMenu = isLoggedIn ? (
     <>
-      <IconButton size="small" onClick={handleUserMobileMenuClick}>
-        <MoreIcon />
-      </IconButton>
+      <Badge badgeContent={cartCount} color="primary">
+        <IconButton
+          size="small"
+          className={classes.iconButton}
+          onClick={handleUserMobileMenuClick}
+        >
+          <MoreIcon />
+        </IconButton>
+      </Badge>
+
       <Menu
         id={userMobileMenuId}
         open={isUserMobileMenuOpen}
@@ -308,16 +362,29 @@ const MenuLinks = () => {
         }}
         classes={{ paper: classes.popover }}
       >
-        <Typography variant="body1" className={classes.menuItem}>
-          {cartCount === 1 ? `${cartCount} item` : `${cartCount} items`}
-        </Typography>
-        <MenuItem
-          onClick={handleUserMobileMenuClose}
-          className={classes.menuItem}
-        >
-          Go to the basket
-        </MenuItem>
-        <Divider />
+        {cartCount > 0 && (
+          <Box>
+            {cartItems}
+            <Divider />
+            <Typography
+              variant="body1"
+              component="div"
+              className={classes.menuItem}
+            >
+              <span className={classes.quantity}>Total</span>
+              <span className={classes.price}>{getCurrency(cartTotal)}</span>
+            </Typography>
+            <MenuItem
+              onClick={handleUserMobileMenuClose}
+              className={classes.menuItem}
+            >
+              <Typography variant="body2" fontWeight="600" component="span">
+                Go to cart
+              </Typography>
+            </MenuItem>
+            <Divider />
+          </Box>
+        )}
         <Link to={PATH.LOGOUT} className={classes.link}>
           <MenuItem className={classes.menuItem}>Logout</MenuItem>
         </Link>
