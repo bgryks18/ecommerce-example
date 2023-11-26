@@ -67,6 +67,6 @@ export const useGetCart = () => {
     },
     retry: false,
     refetchOnReconnect: true,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
   })
 }
