@@ -203,13 +203,7 @@ const Counter = ({
     try {
       countRef.current.textContent = String(newQuantityValue)
 
-      const { quantity } = await mutateAddToCart()
-
-      if (quantity !== newQuantityValue) {
-        if (countRef.current) {
-          countRef.current.textContent = String(quantity)
-        }
-      }
+      await mutateAddToCart()
     } catch (e: any) {
       console.log('error', e)
       setError(
@@ -232,14 +226,7 @@ const Counter = ({
     try {
       countRef.current.textContent = String(newQuantityValue)
 
-      const updatetItem = await mutateRemoveFromCart()
-      const quantity = updatetItem?.quantity || 0
-
-      if (quantity !== newQuantityValue) {
-        if (countRef.current) {
-          countRef.current.textContent = String(quantity)
-        }
-      }
+      await mutateRemoveFromCart()
     } catch (e: any) {
       console.log('error', e)
       setError(
@@ -276,6 +263,7 @@ const Counter = ({
               : 'hidden',
         }}
         onDoubleClick={(e) => {
+          decreaseProduct.cancel()
           e.preventDefault()
         }}
       >
@@ -296,6 +284,7 @@ const Counter = ({
         variant="outlined"
         onClick={handleIncrease}
         onDoubleClick={(e) => {
+          increaseProduct.cancel()
           e.preventDefault()
         }}
       >
