@@ -10,18 +10,20 @@ import { Snackbar } from '@mui/material'
 import { useTheme } from '@mui/styles'
 import { useAtom } from 'jotai'
 import { errorState } from './store/ui'
+import { useCurrentUser } from './hooks/useCurrentUser'
 
 function App() {
   const theme = useTheme()
   const [error, setError] = useAtom(errorState)
   useGetCart()
+  const { isLoggedIn } = useCurrentUser()
 
   return (
     <>
       <Routes>
         <Route path={PATH.HOME} element={<Home />}></Route>
-        <Route path={PATH.LOGIN} element={<Login />}></Route>
-        <Route path={PATH.LOGOUT} element={<Logout />}></Route>
+        {!isLoggedIn && <Route path={PATH.LOGIN} element={<Login />}></Route>}
+        {isLoggedIn && <Route path={PATH.LOGOUT} element={<Logout />}></Route>}
         <Route path={PATH.SEARCH} element={<Search />}></Route>
         <Route path={'*'} element={<Notfound />}></Route>
       </Routes>
