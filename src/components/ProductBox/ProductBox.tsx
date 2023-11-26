@@ -203,7 +203,13 @@ const Counter = ({
     try {
       countRef.current.textContent = String(newQuantityValue)
 
-      await mutateAddToCart()
+      const { quantity } = await mutateAddToCart()
+
+      if (quantity !== newQuantityValue) {
+        if (countRef.current) {
+          countRef.current.textContent = String(quantity)
+        }
+      }
     } catch (e: any) {
       console.log('error', e)
       setError(
@@ -215,7 +221,7 @@ const Counter = ({
         countRef.current.textContent = String(prevQuantityValue)
       }
     }
-  }, 0)
+  }, 100)
 
   const decreaseProduct = debounce(async () => {
     if (!countRef.current) return
@@ -226,7 +232,14 @@ const Counter = ({
     try {
       countRef.current.textContent = String(newQuantityValue)
 
-      await mutateRemoveFromCart()
+      const updatetItem = await mutateRemoveFromCart()
+      const quantity = updatetItem?.quantity || 0
+
+      if (quantity !== newQuantityValue) {
+        if (countRef.current) {
+          countRef.current.textContent = String(quantity)
+        }
+      }
     } catch (e: any) {
       console.log('error', e)
       setError(
@@ -238,7 +251,7 @@ const Counter = ({
         countRef.current.textContent = String(prevQuantityValue)
       }
     }
-  }, 0)
+  }, 100)
 
   const handleIncrease = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()

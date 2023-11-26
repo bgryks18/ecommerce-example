@@ -31,7 +31,7 @@ export const useAddToCart = (id: string) => {
 
 export const useRemoveFromCart = (id: string) => {
   const { setCart } = useCurrentUser()
-  return useMutation<CartItemEntity[]>(
+  return useMutation<CartItemEntity | undefined>(
     async () => {
       await API.post(
         '/subtract-from-cart',
@@ -46,7 +46,9 @@ export const useRemoveFromCart = (id: string) => {
         '/view-cart'
       )
       setCart(cardData)
-      return cardData
+      const updatedItem = cardData.find((item) => item.productId === id)
+
+      return updatedItem
     },
     {
       retry: false,
