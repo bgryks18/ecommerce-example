@@ -429,7 +429,7 @@ const SearchForm = () => {
     )
 
     const createdPath = createPath({
-      pathname: PATH.SEARCH,
+      pathname: PATH.HOME,
       search: searchParams.toString(),
     })
 

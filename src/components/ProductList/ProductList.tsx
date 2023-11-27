@@ -4,11 +4,11 @@ import { ReactNode, useEffect } from 'react'
 import { useGetProducts } from '@/api/product'
 import { get, isEmpty } from 'lodash'
 import ProductBoxSkeleton from '@/components/Layout/Skeleton/ProductBoxSkeleton'
+import { useSearchParams } from 'react-router-dom'
 
 const ProductList = ({
   title,
   gridSize = { md: 4 },
-  searchParams,
 }: {
   gridSize?: {
     xl?: GridSize
@@ -19,8 +19,15 @@ const ProductList = ({
   }
 
   title?: string | ReactNode
-  searchParams?: Record<string, unknown>
 }) => {
+  const [currentSearchParamms] = useSearchParams()
+  const searchParams: Record<string, unknown> | undefined =
+    currentSearchParamms.get('q')
+      ? {
+          name: currentSearchParamms.get('q'),
+        }
+      : undefined
+
   const {
     data = [],
     isFetched,
@@ -29,7 +36,9 @@ const ProductList = ({
     isRefetching,
     isFetching,
     error,
+    isFetchedAfterMount,
   } = useGetProducts(searchParams)
+
   const isSearchMode = !isEmpty(searchParams)
   const searchKey = get(searchParams, 'name') as string
   const isNoResult =
@@ -37,9 +46,12 @@ const ProductList = ({
   const showSkeleton =
     data.length === 0 && (isLoading || isRefetching || isFetching)
   const showdData = !isLoading && !isRefetching && !isFetching && !isNoResult
+
   useEffect(() => {
-    refetch(searchParams)
-  }, [searchParams])
+    if (searchParams && isFetchedAfterMount) {
+      refetch(searchParams)
+    }
+  }, [currentSearchParamms])
 
   return (
     <Grid
