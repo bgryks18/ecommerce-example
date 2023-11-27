@@ -1,6 +1,6 @@
-import { Grid, GridSize, Typography } from '@mui/material'
+import { Button, Grid, GridSize, Typography } from '@mui/material'
 import ProductBox from '@/components/ProductBox/ProductBox'
-import { ReactNode, useEffect } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { useGetProducts } from '@/api/product'
 import { get, isEmpty } from 'lodash'
 import ProductBoxSkeleton from '@/components/Layout/Skeleton/ProductBoxSkeleton'
@@ -20,6 +20,7 @@ const ProductList = ({
 
   title?: string | ReactNode
 }) => {
+  const limit = 3
   const [currentSearchParamms] = useSearchParams()
   const searchParams: Record<string, unknown> | undefined =
     currentSearchParamms.get('q')
@@ -39,13 +40,18 @@ const ProductList = ({
     isFetchedAfterMount,
   } = useGetProducts(searchParams)
 
+  const [showCount, setShowCount] = useState<number>(limit)
   const isSearchMode = !isEmpty(searchParams)
   const searchKey = get(searchParams, 'name') as string
   const isNoResult =
     data.length === 0 && !isLoading && isFetched && !isRefetching && !isFetching
   const showSkeleton =
     data.length === 0 && (isLoading || isRefetching || isFetching)
-  const showdData = !isLoading && !isRefetching && !isFetching && !isNoResult
+  const showData = !isLoading && !isRefetching && !isFetching && !isNoResult
+
+  const list = showData
+    ? data.slice(data.length - showCount <= 0 ? 0 : data.length - showCount)
+    : []
 
   useEffect(() => {
     if (searchParams && isFetchedAfterMount) {
@@ -72,7 +78,7 @@ const ProductList = ({
       >
         {title && title}
       </Typography>
-      {isSearchMode && showdData && (
+      {isSearchMode && showData && (
         <Typography
           component="h2"
           variant="h5"
@@ -95,8 +101,8 @@ const ProductList = ({
             </Grid>
           ))}
 
-      {showdData &&
-        data.map((item) => {
+      {showData &&
+        list.map((item, index) => {
           return (
             <Grid item {...gridSize} width={'100%'} key={item.id}>
               <ProductBox {...item} />
@@ -130,6 +136,35 @@ const ProductList = ({
             <Typography component="span">No data found</Typography>
           )}
         </Typography>
+      )}
+      {showData && !isSearchMode && (
+        <Grid item xs={12}>
+          <Typography
+            variant="body2"
+            sx={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItem: 'center',
+              marginTop: '40px',
+            }}
+          >
+            <Button
+              variant="contained"
+              sx={{ textTransform: 'none' }}
+              disabled={!showData || showCount === data.length}
+              onClick={() => {
+                if (showCount < data.length) {
+                  setShowCount((prev) =>
+                    prev + limit > data.length ? data.length : prev + limit
+                  )
+                }
+              }}
+            >
+              Load more...
+            </Button>
+          </Typography>
+        </Grid>
       )}
     </Grid>
   )
