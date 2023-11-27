@@ -10,6 +10,7 @@ import { useTheme } from '@mui/styles'
 import { useAtom } from 'jotai'
 import { errorState } from './store/ui'
 import { useCurrentUser } from './hooks/useCurrentUser'
+import Category from './pages/Category'
 
 function App() {
   const theme = useTheme()
@@ -23,6 +24,7 @@ function App() {
         <Route path={PATH.HOME} element={<Home />}></Route>
         {!isLoggedIn && <Route path={PATH.LOGIN} element={<Login />}></Route>}
         {isLoggedIn && <Route path={PATH.LOGOUT} element={<Logout />}></Route>}
+        <Route path={PATH.CATEGORY_DETAIL} element={<Category />}></Route>
         <Route path={'*'} element={<Notfound />}></Route>
       </Routes>
 

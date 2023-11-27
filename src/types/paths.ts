@@ -2,5 +2,5 @@ export enum PATH {
   HOME = '/',
   LOGIN = '/login',
   LOGOUT = '/logout',
-  SEARCH = '/search',
+  CATEGORY_DETAIL = '/category/:categoryId',
 }

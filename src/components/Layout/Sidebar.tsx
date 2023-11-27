@@ -1,11 +1,8 @@
 import { Divider, MenuItem, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import EggIcon from '@mui/icons-material/EggOutlined'
-import FreeBreakfastIcon from '@mui/icons-material/FreeBreakfastOutlined'
-import IcecreamIcon from '@mui/icons-material/IcecreamOutlined'
-import RestaurantIcon from '@mui/icons-material/RestaurantOutlined'
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenuOutlined'
-import EggAltIcon from '@mui/icons-material/EggAltOutlined'
+import { PATH } from '@/types/paths'
+import { Link, generatePath } from 'react-router-dom'
+import { categories } from '@/utils/ui'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -61,6 +58,9 @@ const useStyles = makeStyles((theme) => ({
       padding: '6px 16px',
     },
   },
+  linkItem: {
+    textDecoration: 'none !important',
+  },
 }))
 
 const Sidebar = () => {
@@ -72,42 +72,23 @@ const Sidebar = () => {
           Top Categories
           <Divider />
         </Typography>
-        <MenuItem>
-          <EggIcon />
-          <Typography variant="body2" fontWeight="bold" component="span">
-            Dairy Eggs
-          </Typography>
-        </MenuItem>
-        <MenuItem>
-          <FreeBreakfastIcon />
-          <Typography variant="body2" fontWeight="bold" component="span">
-            Breakfast
-          </Typography>
-        </MenuItem>
-        <MenuItem>
-          <IcecreamIcon />
-          <Typography variant="body2" fontWeight="bold" component="span">
-            Frozen
-          </Typography>
-        </MenuItem>
-        <MenuItem>
-          <RestaurantIcon />
-          <Typography variant="body2" fontWeight="bold" component="span">
-            Vegetables
-          </Typography>
-        </MenuItem>
-        <MenuItem>
-          <RestaurantMenuIcon />
-          <Typography variant="body2" fontWeight="bold" component="span">
-            Fruits & Vegetables
-          </Typography>
-        </MenuItem>
-        <MenuItem>
-          <EggAltIcon />
-          <Typography variant="body2" fontWeight="bold">
-            Dairy & Eggs
-          </Typography>
-        </MenuItem>
+
+        {categories().map((item) => (
+          <Link
+            to={generatePath(PATH.CATEGORY_DETAIL, {
+              categoryId: item.id,
+            })}
+            className={classes.linkItem}
+            key={item.id}
+          >
+            <MenuItem>
+              <item.icon />
+              <Typography variant="body2" fontWeight="bold" component="span">
+                {item.label}
+              </Typography>
+            </MenuItem>
+          </Link>
+        ))}
       </Paper>
     </div>
   )
