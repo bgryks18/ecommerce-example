@@ -164,8 +164,6 @@ const Counter = ({
   cart: CartItemEntity[]
   productId: string
 }) => {
-  const [isInitialized, setIsInitialized] = useState(false)
-
   const countRef = useRef<HTMLDivElement>(null)
 
   const setError = useSetAtom(errorState)
@@ -183,12 +181,9 @@ const Counter = ({
   )
 
   useEffect(() => {
-    if (
-      countRef.current &&
-      currentCount !== Number(countRef.current?.textContent) &&
-      !isInitialized
-    ) {
-      countRef.current.textContent = String(currentCount)
+    checkValue(currentCount, Number(countRef.current?.textContent))
+    return () => {
+      checkValue.cancel()
     }
   }, [currentCount])
 
@@ -201,18 +196,16 @@ const Counter = ({
         countRef.current.textContent = String(quantity)
       }
     }
-  }, 0)
+  }, 500)
 
   const increaseProduct = debounce(async () => {
     if (!countRef.current) return
-    if (!isInitialized) setIsInitialized(true)
     const prevQuantityValue = Number(countRef.current.textContent)
     const newQuantityValue = Number(countRef.current.textContent) + 1
     try {
       countRef.current.textContent = String(newQuantityValue)
 
-      const { quantity } = await mutateAddToCart()
-      checkValue(quantity, newQuantityValue)
+      await mutateAddToCart()
     } catch (e: any) {
       console.log('error', e)
       setError(
@@ -228,16 +221,13 @@ const Counter = ({
 
   const decreaseProduct = debounce(async () => {
     if (!countRef.current) return
-    if (!isInitialized) setIsInitialized(true)
     const prevQuantityValue = Number(countRef.current?.textContent)
     const newQuantityValue = Number(countRef.current.textContent) - 1
     if (prevQuantityValue === 0) return
     try {
       countRef.current.textContent = String(newQuantityValue)
 
-      const updatedItem = await mutateRemoveFromCart()
-      const quantity = updatedItem?.quantity || 0
-      checkValue(quantity, newQuantityValue)
+      await mutateRemoveFromCart()
     } catch (e: any) {
       console.log('error', e)
       setError(
@@ -253,14 +243,12 @@ const Counter = ({
 
   const handleIncrease = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    checkValue.cancel()
     increaseProduct.cancel()
     increaseProduct()
   }
 
   const handleDecrease = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    checkValue.cancel()
     decreaseProduct.cancel()
     decreaseProduct()
   }

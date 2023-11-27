@@ -16,11 +16,11 @@ export const useAddToCart = (id: string) => {
           },
         }
       )
-      const { data: cardData }: { data: CartItemEntity[] } = await API.get(
+      const { data: cartData }: { data: CartItemEntity[] } = await API.get(
         '/view-cart'
       )
-      setCart(cardData)
-      const updatedItem = cardData.find((item) => item.productId === id)
+      setCart(cartData)
+      const updatedItem = cartData.find((item) => item.productId === id)
       return updatedItem as CartItemEntity
     },
     {
@@ -42,11 +42,11 @@ export const useRemoveFromCart = (id: string) => {
           },
         }
       )
-      const { data: cardData }: { data: CartItemEntity[] } = await API.get(
+      const { data: cartData }: { data: CartItemEntity[] } = await API.get(
         '/view-cart'
       )
-      setCart(cardData)
-      const updatedItem = cardData.find((item) => item.productId === id)
+      setCart(cartData)
+      const updatedItem = cartData.find((item) => item.productId === id)
 
       return updatedItem
     },
